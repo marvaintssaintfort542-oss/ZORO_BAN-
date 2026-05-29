@@ -1,7 +1,6 @@
 {
   "name": "zoro-bot",
   "version": "1.0.0",
-  "description": "WhatsApp and Telegram Bot Zoro",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
