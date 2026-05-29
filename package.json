@@ -4,14 +4,19 @@
   "description": "WhatsApp and Telegram Bot Zoro",
   "main": "index.js",
   "scripts": {
-    "start": "pm2 start index.js --name whatsapp && pm2 start telegram.js --name telegram --no-daemon"
+    "start": "node index.js"
   },
   "dependencies": {
-    "@whiskeysockets/baileys": "^6.7.5",
-    "pino": "^8.0.0",
-    "qrcode-terminal": "^0.12.0",
+    "@whiskeysockets/baileys": "latest",
     "@hapi/boom": "^10.0.1",
-    "telegraf": "^4.16.3",
-    "pm2": "^5.3.1"
+    "awesome-phonenumber": "^6.0.0",
+    "axios": "^1.7.0",
+    "express": "^4.21.0",
+    "file-type": "^18.7.0",
+    "libphonenumber-js": "^1.11.0",
+    "node-cache": "^5.1.2",
+    "node-telegram-bot-api": "^0.66.0",
+    "pino": "^9.0.0",
+    "qrcode-terminal": "^0.12.0"
   }
 }
