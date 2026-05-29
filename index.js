@@ -1,7 +1,11 @@
-const { default: makeWASocket, useMultiFileAuthState, DisconnectReason } = require('@whiskeysockets/baileys');
+const { default: makeWASocket, useMultiFileAuthState, DisconnectReason, delay } = require('@whiskeysockets/baileys');
 const pino = require('pino');
 const { Boom } = require('@hapi/boom');
 const { gererCommandes } = require('./commandes');
+
+// ⚠️ METS TON NUMÉRO ICI (avec l'indicatif pays, ex: "33612345678" ou "50912345678")
+// Laisse vide "" si tu veux utiliser le numéro par défaut ou une autre méthode
+const NUMERO_BOT = "TON_NUMERO_ICI"; 
 
 async function startZoroBot() {
     const { state, saveCreds } = await useMultiFileAuthState('session');
@@ -9,17 +13,26 @@ async function startZoroBot() {
     const sock = makeWASocket({
         logger: pino({ level: 'silent' }),
         auth: state,
-        printQRInTerminal: true
+        printQRInTerminal: !NUMERO_BOT // N'affiche le QR que si le numéro est vide
     });
+
+    // Système de Code de Jumelage (Pairing Code)
+    if (NUMERO_BOT && !sock.authState.creds.registered) {
+        await delay(3000); // Attente que le système s'initialise
+        try {
+            let code = await sock.requestPairingCode(NUMERO_BOT.trim());
+            console.log(`\n=========================================`);
+            console.log(`🔑 TON CODE DE JUMELAGE : ${code}`);
+            console.log(`=========================================\n`);
+        } catch (error) {
+            console.log("Erreur lors de la création du code de jumelage :", error);
+        }
+    }
 
     sock.ev.on('creds.update', saveCreds);
 
     sock.ev.on('connection.update', (update) => {
-        const { connection, lastDisconnect, qr } = update;
-        
-        if (qr) {
-            console.log("[ZORO] Un QR Code est disponible ! Regarde tes logs Render pour le scanner.");
-        }
+        const { connection, lastDisconnect } = update;
         
         if (connection === 'close') {
             const shouldReconnect = (lastDisconnect.error instanceof Boom)?.output?.statusCode !== DisconnectReason.loggedOut;
