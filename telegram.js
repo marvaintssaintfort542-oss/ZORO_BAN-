@@ -5,33 +5,39 @@ const TELEGRAM_TOKEN = "7550664742:AAHeGHfC-Fdbn7GYCeT7l5-y7ZS2l5v_4pE";
 
 const bot = new Telegraf(TELEGRAM_TOKEN);
 
-// URL de ta photo pour le /start (Mets ton lien public ici)
+// ⚠️ METS LE LIEN DIRECT DE TA PHOTO ICI (se terminant par .jpg ou .png)
 const PHOTO_URL = "METS_LE_LIEN_DE_TA_PHOTO_ICI";
 
-// État des modules de sécurité (Activé/Désactivé)
-let antiLinkActive = false;
-let antiWordActive = false;
-let antiSpamActive = false;
-
-// Commande /start avec Photo
+// Commande /start (Photo + Infos du Bot stylées)
 bot.start((ctx) => {
+    const welcomeText = 
+        `╭━━━✦━━━〔 **BOT INFO** 〕━━━✦━━━╮\n` +
+        `┃\n` +
+        `┃ ✦ **BOT** : ZORO-XMD\n` +
+        `┃ ✦ **USER** : @${ctx.botInfo.username}\n` +
+        `┃ ✦ **TYPE** : NODEJS (TELEGRAF)\n` +
+        `┃ ✦ **PREFIX** : « / »\n` +
+        `┃ ✦ **VERSION** : 1.0.0\n` +
+        `┃ ✦ **MODE** : PUBLIC\n` +
+        `┃ ✦ **DEV** : PDG-ZORO\n` +
+        `┃\n` +
+        `╰━━━✦━━━━━━━━━━━━━━━━━━✦━━━╯\n\n` +
+        `⚔️ *ZORO-XMD est prêt à sécuriser le secteur.*\n` +
+        `Tape /aide ou /menu pour voir les commandes.`;
+
     ctx.replyWithPhoto(PHOTO_URL, {
-        caption: "⚔️ *Bot Zoro-XMD Actif* ⚔️\nPrêt à sécuriser et administrer le secteur.\nTape /menu pour voir toutes les commandes.",
+        caption: welcomeText,
         parse_mode: 'Markdown'
     });
 });
 
-// Menu complet style WhatsApp
-bot.command(['menu', 'aide'], (ctx) => {
-    const menu = `⚔️ *「 ZORO-XMD GROUP MENU 」* ⚔️\n\n` +
-                 `*⚙️ GESTION DU GROUPE :*\n` +
-                 `• /closetime : Fermer le groupe\n` +
-                 `• /opentime : Ouvrir le groupe\n` +
-                 `• /setdesc [texte] : Changer la description\n` +
-                 `• /setgpp : Changer la photo du groupe\n` +
-                 `• /linkgc : Obtenir le lien du groupe\n` +
-                 `• /revoke : Réinitialiser le lien\n\n` +
-                 `*🔨 MODÉRATION & NETTOYAGE :*\n` +
-                 `• /kick (en réponse) : Exclure un membre\n` +
-                 `• /add [ID] : Ajouter un membre\n` +
-                 `• /promote (en réponse) : M
+// Commande /aide ou /menu (Toutes les commandes rangées dans des cases stylées)
+bot.command(['aide', 'menu'], (ctx) => {
+    const menuText = 
+        `╭━━━✦━━━〔 **GROUP MENU** 〕━━━✦━━━╮\n` +
+        `┃\n` +
+        `┃ 🌟 ➢ /ban \`[en réponse]\` : Éliminer la cible\n` +
+        `┃ 🌟 ➢ /kick \`[en réponse]\` : Exclure un membre\n` +
+        `┃ 🌟 ➢ /purge \`[en réponse]\` : Nettoyer le chat\n` +
+        `┃\n` +
+        `╰━━━✦━━━━━━━━━━━━━━━━━━✦━━━╯\n\n` +
