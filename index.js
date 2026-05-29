@@ -3,8 +3,7 @@ const pino = require('pino');
 const { Boom } = require('@hapi/boom');
 const { gererCommandes } = require('./commandes');
 
-// ⚠️ METS TON NUMÉRO ICI (avec l'indicatif pays, ex: "33612345678" ou "50912345678")
-// Laisse vide "" si tu veux utiliser le numéro par défaut ou une autre méthode
+// ⚠️ METS TON NUMÉRO ICI (Exemple: "50912345678" pour Haïti ou "33612345678" pour la France)
 const NUMERO_BOT = "TON_NUMERO_ICI"; 
 
 async function startZoroBot() {
@@ -13,19 +12,19 @@ async function startZoroBot() {
     const sock = makeWASocket({
         logger: pino({ level: 'silent' }),
         auth: state,
-        printQRInTerminal: !NUMERO_BOT // N'affiche le QR que si le numéro est vide
+        browser: ["Ubuntu", "Chrome", "20.0.04"] // Obligatoire pour le pairing code
     });
 
-    // Système de Code de Jumelage (Pairing Code)
+    // Système de Code de Jumelage
     if (NUMERO_BOT && !sock.authState.creds.registered) {
-        await delay(3000); // Attente que le système s'initialise
+        await delay(5000); // Petite attente pour laisser le système s'initialiser
         try {
             let code = await sock.requestPairingCode(NUMERO_BOT.trim());
             console.log(`\n=========================================`);
             console.log(`🔑 TON CODE DE JUMELAGE : ${code}`);
             console.log(`=========================================\n`);
         } catch (error) {
-            console.log("Erreur lors de la création du code de jumelage :", error);
+            console.log("Erreur lors de la génération du code :", error);
         }
     }
 
